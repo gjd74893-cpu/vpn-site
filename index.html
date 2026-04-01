@@ -3,19 +3,43 @@
   <head>
     <meta charset="UTF-8">
     <title>Kakadu: One Family – Официальный сайт</title>
+    
+    <!-- Принудительно задаем корень сайта для GitHub Pages -->
+    <script>
+      (function() {
+        var segment = 'vpn-site';
+        var base = window.location.origin + '/' + segment + '/';
+        var el = document.createElement('base');
+        el.href = base;
+        document.head.appendChild(el);
+      })();
+    </script>
+
     <link rel="icon" href="favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" crossorigin src="./assets/index-DVNmE8I2.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/prerender-c8efxLcN.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-DJu_O_Yu.css">
     
+    <!-- Используем пути без точек, так как <base> их достроит -->
+    <script type="module" crossorigin src="assets/index-DVNmE8I2.js"></script>
+    <link rel="modulepreload" crossorigin href="assets/prerender-c8efxLcN.js">
+    <link rel="stylesheet" crossorigin href="assets/index-DJu_O_Yu.css">
+
     <script>
-      // ФИКС РОУТЕРА ДЛЯ GITHUB PAGES
-      // Этот скрипт должен быть ПЕРЕД основным JS
+      // ФИКС РОУТЕРА И КАРТИНОК
+      window.addEventListener('error', function(e) {
+        if (e.target.tagName === 'IMG' || e.target.tagName === 'SOURCE') {
+          var src = e.target.src || e.target.srcset;
+          if (src && !src.includes('/vpn-site/assets/')) {
+            // Если картинка не грузится, пробуем добавить путь к папке репозитория
+            var newSrc = src.replace(window.location.origin + '/', window.location.origin + '/vpn-site/');
+            if (e.target.src) e.target.src = newSrc;
+            if (e.target.srcset) e.target.srcset = newSrc;
+          }
+        }
+      }, true);
+
       (function() {
         var path = window.location.pathname;
         if (path.includes('/vpn-site/')) {
-          // Если мы на гитхабе, подменяем историю, чтобы роутер не зациклился
           window.history.replaceState(null, '', path.replace('/vpn-site/', '/'));
         }
       })();
